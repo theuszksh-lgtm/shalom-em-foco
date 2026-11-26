@@ -82,9 +82,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Acamp's Shalom — Fotos oficiais" },
+      { title: "Acamps 2K27.1 — Fotos oficiais" },
       { name: "description", content: "Fotos oficiais do Acampamento de Jovens Shalom." },
-      { property: "og:title", content: "Acamp's Shalom — Fotos oficiais" },
+      { property: "og:title", content: "Acamps 2K27.1 — Fotos oficiais" },
       { property: "og:description", content: "Fotos oficiais do Acampamento de Jovens Shalom." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
