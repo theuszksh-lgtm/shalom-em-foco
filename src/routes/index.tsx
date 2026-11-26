@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Download, X, Camera } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { CAMP_DAYS, isCampDay } from "@/lib/camp";
@@ -24,34 +24,55 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const backgroundPhotos = ["ACAMP'S 2K25.1-52.jpg","ACAMP'S 2K25.1-66.jpg","ACAMP'S 2K25.1-179.jpg","IMG_4707.jpg","Acamps lazer-022.jpg","Acamps lazer-035.jpg","Acamps lazer-039.jpg","Acamps lazer-044.jpg","Acamps lazer-128.jpg","Acamps missa -08.jpg","Acamps missa -22.jpg","Canto das Irias -010.jpg","IMG_5849.jpg","IMG_5858.jpg","Lazer -061.jpg","Lazer -120.jpg","Missa Quarta -19.jpg","Swing leva -79.jpg","Swing leva -86.jpg"];
+const backgroundPhotosByDay = [
+  [
+    "ACAMP'S 2K25.1-52.jpg",
+    "ACAMP'S 2K25.1-66.jpg",
+    "ACAMP'S 2K25.1-179.jpg",
+    "IMG_4707.jpg",
+    "Acamps missa -08.jpg",
+    "Acamps lazer-035.jpg"
+  ],
+  [
+    "Acamps lazer-022.jpg",
+    "Acamps lazer-039.jpg",
+    "Acamps lazer-044.jpg",
+    "Acamps lazer-128.jpg"
+  ],
+  [
+    "Acamps missa -22.jpg",
+    "Canto das Irias -010.jpg",
+    "IMG_5849.jpg"
+  ],
+  [
+    "IMG_5858.jpg",
+    "Lazer -061.jpg",
+    "Lazer -120.jpg"
+  ],
+  [
+    "Missa Quarta -19.jpg",
+    "Swing leva -79.jpg",
+    "Swing leva -86.jpg"
+  ]
+];
 
 function Index() {
   const { dia } = Route.useSearch();
   const { data, isLoading, error } = useQuery(photosQuery(dia));
   const [open, setOpen] = useState<Photo | null>(null);
   const current = CAMP_DAYS[dia - 1];
-  const [backgroundPage, setBackgroundPage] = useState(0);
-  useEffect(() => {
-    const update = () => setBackgroundPage(Math.floor(window.scrollY / Math.max(240, window.innerHeight * 0.45)));
-    update();
-    window.addEventListener("scroll", update, { passive: true });
-    const timer = window.setInterval(() => setBackgroundPage(p => p + 1), 10000);
-    return () => { window.removeEventListener("scroll", update); window.clearInterval(timer); };
-  }, []);
+  const backgroundPhotos = backgroundPhotosByDay[dia - 1] ?? backgroundPhotosByDay[0];
 
   return (
     <div className="relative isolate min-h-screen bg-[#087e96] text-[#fff9e8] [background-image:radial-gradient(#ffffff18_1px,transparent_1px)] [background-size:16px_16px]">
       <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-        <div className="grid h-full grid-cols-2 grid-rows-2">
-          {Array.from({ length: 4 }, (_, i) => {
-            const name = backgroundPhotos[(backgroundPage * 4 + i) % backgroundPhotos.length];
-            return <div key={i} className="relative min-h-0 overflow-hidden">
-              <img key={name} src={"/" + encodeURIComponent(name)} alt="" className="h-full w-full object-cover motion-safe:animate-[photoFade_700ms_ease-out]" />
-            </div>;
-          })}
+        <div className={`grid h-full w-full ${backgroundPhotos.length === 6 ? "grid-cols-2 grid-rows-3 sm:grid-cols-3 sm:grid-rows-2" : backgroundPhotos.length === 4 ? "grid-cols-2 grid-rows-2" : "grid-cols-1 grid-rows-3 sm:grid-cols-3 sm:grid-rows-1"}`}>
+          {backgroundPhotos.map((name) => (
+            <div key={name} className="relative min-h-0 min-w-0 overflow-hidden">
+              <img src={"/" + encodeURIComponent(name)} alt="" decoding="async" className="absolute inset-0 h-full w-full object-cover" />
+            </div>
+          ))}
         </div>
-        <style>{'@keyframes photoFade { from { opacity: .35; } to { opacity: 1; } }'}</style>
         <div className="absolute inset-0 bg-[#075a70]/55" />
       </div>
       <SiteHeader />
