@@ -5,7 +5,7 @@ import type { Session } from "@supabase/supabase-js";
 import { toast } from "sonner";
 import { Trash2, Upload, LogOut } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
+
 import { SiteHeader } from "@/components/SiteHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,9 +16,9 @@ import { photosQuery } from "@/lib/photos";
 export const Route = createFileRoute("/comunicacao")({
   head: () => ({
     meta: [
-      { title: "Equipe de comunicação — Acamp's Shalom" },
+      { title: "Equipe de comunicação — Acamps 2K27.1" },
       { name: "description", content: "Área da equipe de comunicação para enviar as fotos oficiais de cada dia do Acamp's." },
-      { property: "og:title", content: "Equipe de comunicação — Acamp's Shalom" },
+      { property: "og:title", content: "Equipe de comunicação — Acamps 2K27.1" },
       { property: "og:description", content: "Envio das fotos oficiais do Acampamento de Jovens Shalom." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -31,6 +31,19 @@ export const Route = createFileRoute("/comunicacao")({
 function Comunicacao() {
   const [session, setSession] = useState<Session | null>(null);
   const [ready, setReady] = useState(false);
+  const [member, setMember] = useState("");
+  const [busy, setBusy] = useState(false);
+  const members = ["Lise", "Matheus", "Maria Clara", "Lucas Gomes", "Enzo"];
+  const choose = async (name: string) => {
+    setBusy(true);
+    try {
+      if (!session) {
+        const { error } = await supabase.auth.signInAnonymously();
+        if (error) { toast.error("Acesso indisponível: a autenticação anônima precisa estar habilitada."); return; }
+      }
+      setMember(name);
+    } catch { toast.error("Não foi possível acessar."); } finally { setBusy(false); }
+  };
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => { setSession(data.session); setReady(true); });
     const { data } = supabase.auth.onAuthStateChange((_e, s) => setSession(s));
@@ -44,55 +57,14 @@ function Comunicacao() {
         <h1 className="text-5xl uppercase text-primary">Comunicação</h1>
         <p className="mt-2 text-foreground/85">Área exclusiva da equipe de comunicação do retiro para enviar as fotos de cada dia.</p>
         <div className="mt-8">
-          {!ready ? null : !session ? <AuthForm /> : <TeamGate userId={session.user.id} email={session.user.email ?? ""} />}
+          {!ready ? <p>Carregando...</p> : !member || !session ? <div className="rounded-2xl bg-card p-6"><h2 className="text-3xl uppercase text-primary">Quem está enviando?</h2><p className="mt-2">Selecione seu nome na equipe.</p><div className="mt-5 grid gap-3 sm:grid-cols-2">{members.map(name => <Button key={name} disabled={busy} onClick={() => choose(name)} className="h-14 text-lg font-bold">{name}</Button>)}</div></div> : <TeamGate userId={session.user.id} email={member} onExit={() => setMember("")} />}
         </div>
       </main>
     </div>
   );
 }
 
-function AuthForm() {
-  const [mode, setMode] = useState<"in" | "up">("in");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [busy, setBusy] = useState(false);
-
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setBusy(true);
-    const { data, error } = mode === "in"
-      ? await supabase.auth.signInWithPassword({ email, password })
-      : await supabase.auth.signUp({ email, password, options: { emailRedirectTo: `${window.location.origin}/comunicacao` } });
-    setBusy(false);
-    if (error) { toast.error(error.message); return; }
-    if (mode === "up" && !data.session) toast.success("Conta criada! Confirme pelo link enviado ao seu e-mail.");
-  };
-
-  const google = async () => {
-    const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: `${window.location.origin}/comunicacao` });
-    if (r.error) toast.error("Não foi possível entrar com Google.");
-  };
-
-  return (
-    <div className="max-w-md rounded-2xl bg-card p-6 text-card-foreground shadow-[var(--shadow-pop)]">
-      <h2 className="text-2xl uppercase">{mode === "in" ? "Entrar" : "Criar conta"}</h2>
-      <form onSubmit={submit} className="mt-4 space-y-4">
-        <div className="space-y-1.5"><Label htmlFor="email">E-mail</Label><Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} /></div>
-        <div className="space-y-1.5"><Label htmlFor="pw">Senha</Label><Input id="pw" type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} /></div>
-        <Button type="submit" disabled={busy} className="w-full font-bold">{mode === "in" ? "Entrar" : "Criar conta"}</Button>
-      </form>
-      <Button type="button" onClick={google} className="mt-3 w-full gap-2.5 border border-[#747775] bg-[#FFFFFF] text-[#1F1F1F] hover:bg-[#F2F2F2]">
-        <svg aria-hidden="true" width="18" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96H1.29v3.09C3.26 21.3 7.31 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.62H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.38l3.98-3.09z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.98 3.09c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
-        Continuar com Google
-      </Button>
-      <button type="button" onClick={() => setMode(mode === "in" ? "up" : "in")} className="mt-4 text-sm underline">
-        {mode === "in" ? "Primeira vez? Criar conta" : "Já tenho conta"}
-      </button>
-    </div>
-  );
-}
-
-function TeamGate({ userId, email }: { userId: string; email: string }) {
+function TeamGate({ userId, email, onExit }: { userId: string; email: string; onExit: () => void }) {
   const qc = useQueryClient();
   const role = useQuery({
     queryKey: ["role", userId],
@@ -116,7 +88,7 @@ function TeamGate({ userId, email }: { userId: string; email: string }) {
     <div>
       <div className="mb-6 flex items-center justify-between rounded-xl bg-muted px-4 py-3 text-sm">
         <span>Conectado como <strong>{email}</strong></span>
-        <button onClick={() => supabase.auth.signOut()} className="inline-flex items-center gap-1 font-semibold"><LogOut className="h-4 w-4" /> Sair</button>
+        <button onClick={async () => { await supabase.auth.signOut(); onExit(); }} className="inline-flex items-center gap-1 font-semibold"><LogOut className="h-4 w-4" /> Sair</button>
       </div>
       {role.isLoading ? null : role.data ? <Uploader /> : (
         <form onSubmit={claim} className="max-w-md rounded-2xl bg-card p-6 shadow-[var(--shadow-pop)]">
