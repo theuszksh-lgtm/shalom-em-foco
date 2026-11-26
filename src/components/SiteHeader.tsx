@@ -5,7 +5,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-30 border-b border-white/10 bg-[#075a70]/85 text-white shadow-lg shadow-black/10 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-4">
         <Link to="/" search={{ dia: 1 }} className="group flex items-center gap-3">
-          <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[#ffdb55]/50 bg-[#ffdb55]/10 text-[#ffe477] transition group-hover:bg-[#ffdb55]/20">✦</span>
+          <img src="/pjj.png" alt="PJJ Sobral" className="h-12 w-12 shrink-0 rounded-xl object-contain" />
           <span>
             <span className="block font-display text-2xl leading-none tracking-wide text-[#fff9e8]">ACAMPS 2K27.1</span>
             <span className="mt-1 block text-[10px] font-semibold uppercase tracking-[0.28em] text-white/60">Acamp's · fotos oficiais</span>
