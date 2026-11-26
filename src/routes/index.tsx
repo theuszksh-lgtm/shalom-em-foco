@@ -41,11 +41,11 @@ function Index() {
       <SiteHeader />
       <main>
         <section className="relative isolate mx-auto flex max-w-6xl flex-col items-center gap-8 overflow-hidden rounded-2xl px-6 py-10 sm:flex-row sm:py-12">
-          <img src="/image.png" alt="Arte oficial do Acamps — Impossível descrever" className="w-48 shrink-0 -rotate-3 rounded-xl shadow-2xl sm:w-56" />
+          <img src="/image.png" alt="Arte oficial do Acamps — Um pedacinho do céu" className="w-48 shrink-0 -rotate-3 rounded-xl shadow-2xl sm:w-56" />
           <div className="text-center sm:text-left">
             <span className="rounded-full bg-[#fff9e8] px-3 py-1 text-xs font-bold uppercase tracking-widest text-[#075a70]">Fotos oficiais</span>
             <h1 className="mt-4 font-display text-5xl uppercase leading-none text-[#ffdb55] sm:text-7xl">ACAMP’S<br/>2K27.1</h1>
-            <p className="mt-3 font-display text-2xl uppercase text-white">Impossível descrever</p>
+            <p className="mt-3 font-display text-2xl uppercase text-white">Um pedacinho do céu</p>
             <p className="mt-4 text-sm font-bold uppercase">11 a 15 de janeiro · Pousada Recanto do Mar</p>
           </div>
         </section>
