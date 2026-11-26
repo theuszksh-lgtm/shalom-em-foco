@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { Download, X } from "lucide-react";
+import { Download, X, Camera, Sparkles } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { CAMP_DAYS, isCampDay } from "@/lib/camp";
 import { photosQuery, type Photo } from "@/lib/photos";
@@ -13,10 +13,10 @@ export const Route = createFileRoute("/")({
   },
   head: () => ({
     meta: [
-      { title: "Galeria oficial — Acamp's Shalom" },
-      { name: "description", content: "Veja as fotos oficiais de cada dia do Acampamento de Jovens Shalom, de 11 a 15 de janeiro." },
-      { property: "og:title", content: "Galeria oficial — Acamp's Shalom" },
-      { property: "og:description", content: "As fotos oficiais dos 5 dias do Acamp's, pela Comunidade Católica Shalom." },
+      { title: "Shalom em Foco — Acamp's" },
+      { name: "description", content: "Reviva os encontros, a alegria e a presença de Deus nos cinco dias do Acamp's." },
+      { property: "og:title", content: "Shalom em Foco — Acamp's" },
+      { property: "og:description", content: "As memórias do nosso encontro, em imagens." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -31,81 +31,90 @@ function Index() {
   const current = CAMP_DAYS[dia - 1];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#101c19] text-[#f6f0e5]">
       <SiteHeader />
-      <section className="mx-auto max-w-6xl px-4 pb-8 pt-12 text-center">
-        <p className="text-xs font-bold uppercase tracking-[0.3em] text-foreground/80">Acampamento de Jovens Shalom</p>
-        <h1 className="mt-3 text-6xl uppercase leading-none text-primary sm:text-8xl">Impossível descrever</h1>
-        <p className="mt-4 inline-block rounded-md bg-secondary px-4 py-1.5 text-sm font-bold uppercase text-secondary-foreground">
-          11 a 15 de janeiro · Pousada Recanto do Mar
-        </p>
-        <p className="mx-auto mt-5 max-w-xl text-foreground/90">
-          As fotos oficiais do Acamp's, oferecido pela Comunidade Católica Shalom. Escolha o dia e reviva cada momento.
-        </p>
-      </section>
+      <main>
+        <section className="relative isolate overflow-hidden border-b border-white/10">
+          <div className="absolute inset-0 -z-20 bg-[radial-gradient(ellipse_at_20%_15%,rgba(192,145,74,.25),transparent_42%),radial-gradient(ellipse_at_85%_80%,rgba(39,91,72,.55),transparent_48%),linear-gradient(135deg,#14251f_0%,#101c19_55%,#20251d_100%)]" />
+          <div className="absolute inset-0 -z-10 opacity-[0.12] [background-image:radial-gradient(rgba(255,255,255,.8)_0.6px,transparent_0.6px)] [background-size:7px_7px]" />
+          <div className="mx-auto grid max-w-7xl items-center gap-10 px-5 py-20 sm:py-28 lg:grid-cols-[1.1fr_.9fr]">
+            <div className="max-w-3xl">
+              <p className="inline-flex items-center gap-2 rounded-full border border-[#d8b56b]/40 bg-[#d8b56b]/10 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.28em] text-[#e8cb8d]">
+                <Sparkles className="h-3.5 w-3.5" /> Comunidade Católica Shalom
+              </p>
+              <h1 className="mt-7 font-display text-6xl uppercase leading-[.92] tracking-tight text-[#f6edda] sm:text-8xl lg:text-[6.5rem]">
+                Impossível<br /><span className="text-[#d8b56b]">descrever.</span>
+              </h1>
+              <p className="mt-7 max-w-xl text-base leading-8 text-white/70 sm:text-lg">
+                Tem momentos que a gente não consegue explicar. Só sentir, guardar e reviver. Aqui estão as memórias dos cinco dias do nosso Acamp's.
+              </p>
+              <div className="mt-8 flex flex-wrap items-center gap-3 text-sm">
+                <span className="rounded-full bg-[#d8b56b] px-5 py-3 font-bold text-[#17231e]">11 a 15 de janeiro</span>
+                <span className="rounded-full border border-white/15 px-5 py-3 text-white/70">Pousada Recanto do Mar</span>
+              </div>
+            </div>
+            <div className="relative mx-auto w-full max-w-xl">
+              <div className="absolute -inset-5 rounded-[2rem] border border-[#d8b56b]/20 rotate-3" />
+              <div className="relative grid grid-cols-2 gap-3 rounded-[1.6rem] border border-white/10 bg-white/[0.04] p-3 shadow-2xl shadow-black/30">
+                <div className="col-span-2 flex min-h-44 flex-col justify-between rounded-2xl bg-gradient-to-br from-[#b58b4c]/35 via-[#415b49]/45 to-[#1b2c25] p-6">
+                  <Camera className="h-7 w-7 text-[#e8cb8d]" />
+                  <p className="font-display text-3xl uppercase leading-tight text-[#f6edda]">Memórias que<br />ficam pra vida.</p>
+                </div>
+                <div className="h-24 rounded-2xl bg-gradient-to-br from-[#c9a56b]/35 to-[#5b4933]/50" />
+                <div className="flex h-24 items-end rounded-2xl bg-gradient-to-br from-[#55745b]/60 to-[#1c3027] p-4 text-xs font-semibold uppercase tracking-[.2em] text-white/70">Fé · encontro · alegria</div>
+              </div>
+            </div>
+          </div>
+        </section>
 
-      <nav className="mx-auto flex max-w-6xl flex-wrap justify-center gap-3 px-4" aria-label="Dias do acampamento">
-        {CAMP_DAYS.map((d) => {
-          const active = d.day === dia;
-          return (
-            <Link
-              key={d.day}
-              to="/"
-              search={{ dia: d.day }}
-              className={`rounded-xl border-2 px-5 py-3 text-left transition ${active ? "border-primary bg-primary text-primary-foreground shadow-[var(--shadow-pop)]" : "border-border bg-card text-card-foreground hover:border-primary"}`}
-            >
-              <span className="block font-display text-2xl uppercase leading-none">{d.weekday}</span>
-              <span className="text-xs font-semibold opacity-80">{d.date}</span>
-            </Link>
-          );
-        })}
-      </nav>
+        <section className="mx-auto max-w-7xl px-5 py-12 sm:py-16">
+          <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[.3em] text-[#d8b56b]">Reviva cada instante</p>
+              <h2 className="mt-2 font-display text-4xl uppercase text-[#f6edda] sm:text-5xl">Galeria do Acamp's</h2>
+            </div>
+            <p className="max-w-md text-sm leading-6 text-white/55">Escolha um dos cinco dias e encontre os registros feitos com carinho pela equipe de comunicação.</p>
+          </div>
 
-      <main className="mx-auto max-w-6xl px-4 py-10">
-        <h2 className="mb-6 text-3xl uppercase text-foreground">{current?.weekday} — {current?.date}</h2>
-        {isLoading && (
-          <div className="columns-2 gap-3 sm:columns-3 lg:columns-4">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="mb-3 h-48 animate-pulse rounded-xl bg-muted" />
-            ))}
+          <nav className="grid grid-cols-2 gap-3 sm:grid-cols-5" aria-label="Dias do acampamento">
+            {CAMP_DAYS.map((d) => {
+              const active = d.day === dia;
+              return (
+                <Link key={d.day} to="/" search={{ dia: d.day }} className={`group rounded-2xl border p-4 transition duration-200 ${active ? "border-[#d8b56b] bg-[#d8b56b] text-[#17231e] shadow-lg shadow-[#d8b56b]/10" : "border-white/10 bg-white/[0.035] text-white/75 hover:border-[#d8b56b]/60 hover:bg-white/[0.07]"}`}>
+                  <span className="block text-[10px] font-bold uppercase tracking-[.25em] opacity-65">Janeiro · 2026</span>
+                  <span className="mt-2 block font-display text-3xl uppercase">{d.weekday}</span>
+                  <span className="mt-1 block text-xs font-medium opacity-70">{d.date}</span>
+                </Link>
+              );
+            })}
+          </nav>
+
+          <div className="mt-12 flex items-center justify-between border-b border-white/10 pb-5">
+            <h3 className="font-display text-3xl uppercase text-[#f6edda]">{current?.weekday} <span className="text-[#d8b56b]">/</span> {current?.date}</h3>
+            <span className="text-xs font-semibold uppercase tracking-[.2em] text-white/40">Fotos oficiais</span>
           </div>
-        )}
-        {error && <p className="text-foreground">Não foi possível carregar as fotos agora.</p>}
-        {data && data.length === 0 && (
-          <div className="rounded-2xl border-2 border-dashed border-border p-12 text-center">
-            <p className="font-display text-3xl uppercase text-primary">Em breve</p>
-            <p className="mt-2 text-foreground/80">As fotos deste dia ainda estão sendo preparadas pela equipe de comunicação.</p>
-          </div>
-        )}
-        {data && data.length > 0 && (
-          <div className="columns-2 gap-3 sm:columns-3 lg:columns-4">
-            {data.map((p) => (
-              <button key={p.id} onClick={() => setOpen(p)} className="mb-3 block w-full overflow-hidden rounded-xl bg-muted">
-                <img src={p.url} alt={p.caption ?? `Foto do dia ${dia}`} loading="lazy" className="w-full transition duration-300 hover:scale-105" />
-              </button>
-            ))}
-          </div>
-        )}
+          {isLoading && <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">{Array.from({ length: 8 }).map((_, i) => <div key={i} className="aspect-[4/5] animate-pulse rounded-2xl bg-white/10" />)}</div>}
+          {error && <p className="mt-6 rounded-2xl border border-red-300/20 bg-red-300/5 p-6 text-sm text-red-100">Não foi possível carregar as fotos agora. Tente novamente em instantes.</p>}
+          {data && data.length === 0 && <div className="mt-6 rounded-2xl border border-dashed border-white/20 bg-white/[.025] px-6 py-16 text-center"><Camera className="mx-auto h-8 w-8 text-[#d8b56b]" /><p className="mt-4 font-display text-3xl uppercase text-[#f6edda]">Em breve</p><p className="mt-2 text-sm text-white/55">As fotos deste dia ainda estão sendo preparadas pela equipe de comunicação.</p></div>}
+          {data && data.length > 0 && <div className="mt-6 columns-2 gap-3 sm:columns-3 lg:columns-4">{data.map((p) => <button key={p.id} onClick={() => setOpen(p)} className="mb-3 block w-full overflow-hidden rounded-2xl bg-white/5 ring-1 ring-white/10"><img src={p.url} alt={p.caption ?? `Foto do dia ${dia}`} loading="lazy" className="w-full transition duration-500 hover:scale-105" /></button>)}</div>}
+        </section>
       </main>
 
-      <footer className="border-t border-border py-8 text-center text-sm text-foreground/80">
-        Comunidade Católica Shalom · Acamp's
+      <footer className="border-t border-white/10 bg-black/10 px-5 py-10 text-center">
+        <p className="font-display text-xl uppercase tracking-wide text-[#d8b56b]">Shalom em Foco</p>
+        <p className="mt-2 text-xs text-white/45">Comunidade Católica Shalom · Acamp's</p>
       </footer>
 
-      {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-popover/95 p-4" onClick={() => setOpen(null)}>
-          <button className="absolute right-4 top-4 rounded-full bg-card p-2 text-card-foreground" aria-label="Fechar"><X /></button>
-          <figure className="max-h-full max-w-5xl" onClick={(e) => e.stopPropagation()}>
-            <img src={open.url} alt={open.caption ?? ""} className="max-h-[80vh] rounded-lg object-contain" />
-            <figcaption className="mt-3 flex items-center justify-between gap-4 text-popover-foreground">
-              <span>{open.caption}</span>
-              <a href={open.url} download target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-bold text-primary-foreground">
-                <Download className="h-4 w-4" /> Baixar
-              </a>
-            </figcaption>
-          </figure>
-        </div>
-      )}
+      {open && <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4" onClick={() => setOpen(null)}>
+        <button className="absolute right-4 top-4 rounded-full bg-white/10 p-3 text-white" aria-label="Fechar"><X /></button>
+        <figure className="max-h-full max-w-5xl" onClick={(e) => e.stopPropagation()}>
+          <img src={open.url} alt={open.caption ?? ""} className="max-h-[80vh] rounded-xl object-contain" />
+          <figcaption className="mt-3 flex items-center justify-between gap-4 text-white">
+            <span>{open.caption}</span>
+            <a href={open.url} download target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full bg-[#d8b56b] px-4 py-2 text-sm font-bold text-[#17231e]"><Download className="h-4 w-4" /> Baixar</a>
+          </figcaption>
+        </figure>
+      </div>}
     </div>
   );
 }
