@@ -12,7 +12,7 @@ export function SiteHeader() {
           </span>
         </Link>
         <nav className="flex items-center gap-2 text-sm font-semibold">
-          <Link to="/" search={{ dia: 1 }} activeOptions={{ includeSearch: false }} className="rounded-full px-4 py-2 text-white/75 transition hover:bg-white/10 hover:text-white" activeProps={{ className: "rounded-full bg-white/10 px-4 py-2 text-[#e8cb8d]" }}>Participante</Link>
+          <Link to="/participante" className="rounded-full px-4 py-2 text-white/75 transition hover:bg-white/10 hover:text-white">Participante</Link>
           <Link to="/comunicacao" className="rounded-full border border-[#d8b56b]/50 bg-[#d8b56b] px-4 py-2 text-[#17231e] transition hover:bg-[#f0d69d]">Comunicação</Link>
         </nav>
       </div>
