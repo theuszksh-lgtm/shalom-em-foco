@@ -12,8 +12,8 @@ export function SiteHeader() {
           </span>
         </Link>
         <nav className="flex items-center gap-2 text-sm font-semibold">
-          <Link to="/participante" className="rounded-full px-4 py-2 text-white/75 transition hover:bg-white/10 hover:text-white">Participante</Link>
-          <Link to="/comunicacao" className="rounded-full border border-[#ffdb55]/50 bg-[#ffdb55] px-4 py-2 text-[#07465a] transition hover:bg-[#ffed91]">Comunicação</Link>
+          <Link to="/participante" className="rounded-full px-4 py-2 text-white/75 transition hover:bg-white/10 hover:text-white">Galeria</Link>
+          <Link to="/comunicacao" className="rounded-full border border-[#ffdb55]/50 bg-[#ffdb55] px-4 py-2 text-[#07465a] transition hover:bg-[#ffed91]">Fotógrafos</Link>
         </nav>
       </div>
     </header>
