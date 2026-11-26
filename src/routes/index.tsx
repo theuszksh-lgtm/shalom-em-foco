@@ -31,12 +31,16 @@ function Index() {
   const current = CAMP_DAYS[dia - 1];
 
   return (
-    <div className="min-h-screen bg-[#087e96] text-[#fff9e8] [background-image:radial-gradient(#ffffff18_1px,transparent_1px)] [background-size:16px_16px]">
+    <div className="relative isolate min-h-screen bg-[#087e96] text-[#fff9e8] [background-image:radial-gradient(#ffffff18_1px,transparent_1px)] [background-size:16px_16px]">
+      <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+        <div className="grid h-full grid-cols-2 grid-rows-2 sm:grid-cols-2">
+          {["ACAMP'S 2K25.1-52.jpg", "ACAMP'S 2K25.1-66.jpg", "ACAMP'S 2K25.1-179.jpg", "IMG_4707.jpg"].map(name => <img key={name} src={"/" + encodeURIComponent(name)} alt="" className="h-full min-h-0 w-full object-cover" />)}
+        </div>
+        <div className="absolute inset-0 bg-[#075a70]/65" />
+      </div>
       <SiteHeader />
       <main>
         <section className="relative isolate mx-auto flex max-w-6xl flex-col items-center gap-8 overflow-hidden rounded-2xl px-6 py-10 sm:flex-row sm:py-12">
-          <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 grid grid-cols-4 opacity-25">{["ACAMP\u0027S 2K25.1-52.jpg","ACAMP\u0027S 2K25.1-66.jpg","ACAMP\u0027S 2K25.1-179.jpg","IMG_4707.jpg"].map(name => <img key={name} src={"/" + encodeURIComponent(name)} alt="" className="h-full w-full object-cover" />)}</div>
-          <div aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-r from-[#087e96]/60 to-[#075a70]/90" />
           <img src="/image.png" alt="Arte oficial do Acamps — Impossível descrever" className="w-48 shrink-0 -rotate-3 rounded-xl shadow-2xl sm:w-56" />
           <div className="text-center sm:text-left">
             <span className="rounded-full bg-[#fff9e8] px-3 py-1 text-xs font-bold uppercase tracking-widest text-[#075a70]">Fotos oficiais</span>
@@ -46,13 +50,13 @@ function Index() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-6xl px-5 pb-12">
+        <section className="mx-auto max-w-6xl rounded-2xl bg-[#075a70]/35 px-5 py-6 pb-12 backdrop-blur-[2px]">
           <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
             <div>
               <p className="text-xs font-bold uppercase tracking-[.3em] text-[#ffdb55]">Reviva cada instante</p>
               <h2 className="mt-2 font-display text-4xl uppercase text-[#fff9e8] sm:text-5xl">Galeria do Acamp's</h2>
             </div>
-            <p className="max-w-md text-sm leading-6 text-white/55">Escolha um dos cinco dias e encontre os registros feitos com carinho pela equipe de comunicação.</p>
+            <p className="max-w-md text-sm leading-6 text-white/85">Escolha um dos cinco dias e encontre os registros feitos com carinho pela equipe de comunicação.</p>
           </div>
 
           <nav className="flex flex-wrap gap-2" aria-label="Dias do acampamento">
@@ -70,7 +74,7 @@ function Index() {
 
           <div className="mt-12 flex items-center justify-between border-b border-white/10 pb-5">
             <h3 className="font-display text-3xl uppercase text-[#fff9e8]">{current?.weekday} <span className="text-[#ffdb55]">/</span> {current?.date}</h3>
-            <span className="text-xs font-semibold uppercase tracking-[.2em] text-white/40">Fotos oficiais</span>
+            <span className="text-xs font-semibold uppercase tracking-[.2em] text-white/75">Fotos oficiais</span>
           </div>
           {isLoading && <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">{Array.from({ length: 8 }).map((_, i) => <div key={i} className="aspect-[4/5] animate-pulse rounded-2xl bg-white/10" />)}</div>}
           {error && <p className="mt-6 rounded-2xl border border-red-300/20 bg-red-300/5 p-6 text-sm text-red-100">Não foi possível carregar as fotos agora. Tente novamente em instantes.</p>}
