@@ -54,7 +54,7 @@ function Comunicacao() {
     <div className="min-h-screen bg-[#087e96] [background-image:radial-gradient(#ffffff18_1px,transparent_1px)] [background-size:16px_16px]">
       <SiteHeader />
       <main className="mx-auto max-w-5xl px-4 py-10">
-        <div className="mx-auto max-w-lg text-center"><span className="rounded-full bg-white px-3 py-1 text-xs font-bold uppercase tracking-widest text-[#075a70]">Equipe de fotografia</span><h1 className="mt-5 text-6xl uppercase text-primary">ACAMP’S 2K27.1</h1><p className="mt-2 font-display text-2xl uppercase">Impossível descrever</p></div>
+        <div className="mx-auto max-w-lg text-center"><span className="rounded-full bg-white px-3 py-1 text-xs font-bold uppercase tracking-widest text-[#075a70]">Equipe de fotografia</span><h1 className="mt-5 text-6xl uppercase text-primary">ACAMP’S 2K27.1</h1><p className="mt-2 font-display text-2xl uppercase">Um pedacinho do céu</p></div>
         <p className="mt-4 text-center text-foreground/85">Área exclusiva da equipe de comunicação do retiro para enviar as fotos de cada dia.</p>
         <div className="mt-8">
           {!ready ? <p>Carregando...</p> : !member || !session ? <div className="mx-auto max-w-md rounded-2xl border border-white/20 bg-card p-6"><h2 className="text-3xl uppercase text-primary">Quem está enviando?</h2><p className="mt-2">Selecione seu nome na equipe.</p><div className="mt-5 grid gap-2">{members.map(name => <Button key={name} disabled={busy} onClick={() => choose(name)} className="h-14 text-lg font-bold">{name}</Button>)}</div></div> : <TeamGate userId={session.user.id} email={member} onExit={() => setMember("")} />}
