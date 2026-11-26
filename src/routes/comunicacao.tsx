@@ -9,7 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+
 import { CAMP_DAYS } from "@/lib/camp";
 import { photosQuery } from "@/lib/photos";
 
@@ -51,13 +51,13 @@ function Comunicacao() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#087e96] [background-image:radial-gradient(#ffffff18_1px,transparent_1px)] [background-size:16px_16px]">
       <SiteHeader />
       <main className="mx-auto max-w-5xl px-4 py-10">
-        <h1 className="text-5xl uppercase text-primary">Comunicação</h1>
-        <p className="mt-2 text-foreground/85">Área exclusiva da equipe de comunicação do retiro para enviar as fotos de cada dia.</p>
+        <div className="mx-auto max-w-lg text-center"><span className="rounded-full bg-white px-3 py-1 text-xs font-bold uppercase tracking-widest text-[#075a70]">Equipe de fotografia</span><h1 className="mt-5 text-6xl uppercase text-primary">ACAMP’S 2K27.1</h1><p className="mt-2 font-display text-2xl uppercase">Impossível descrever</p></div>
+        <p className="mt-4 text-center text-foreground/85">Área exclusiva da equipe de comunicação do retiro para enviar as fotos de cada dia.</p>
         <div className="mt-8">
-          {!ready ? <p>Carregando...</p> : !member || !session ? <div className="rounded-2xl bg-card p-6"><h2 className="text-3xl uppercase text-primary">Quem está enviando?</h2><p className="mt-2">Selecione seu nome na equipe.</p><div className="mt-5 grid gap-3 sm:grid-cols-2">{members.map(name => <Button key={name} disabled={busy} onClick={() => choose(name)} className="h-14 text-lg font-bold">{name}</Button>)}</div></div> : <TeamGate userId={session.user.id} email={member} onExit={() => setMember("")} />}
+          {!ready ? <p>Carregando...</p> : !member || !session ? <div className="mx-auto max-w-md rounded-2xl border border-white/20 bg-card p-6"><h2 className="text-3xl uppercase text-primary">Quem está enviando?</h2><p className="mt-2">Selecione seu nome na equipe.</p><div className="mt-5 grid gap-2">{members.map(name => <Button key={name} disabled={busy} onClick={() => choose(name)} className="h-14 text-lg font-bold">{name}</Button>)}</div></div> : <TeamGate userId={session.user.id} email={member} onExit={() => setMember("")} />}
         </div>
       </main>
     </div>
@@ -91,10 +91,10 @@ function TeamGate({ userId, email, onExit }: { userId: string; email: string; on
         <button onClick={async () => { await supabase.auth.signOut(); onExit(); }} className="inline-flex items-center gap-1 font-semibold"><LogOut className="h-4 w-4" /> Sair</button>
       </div>
       {role.isLoading ? null : role.data ? <Uploader /> : (
-        <form onSubmit={claim} className="max-w-md rounded-2xl bg-card p-6 shadow-[var(--shadow-pop)]">
+        <form onSubmit={claim} className="mx-auto max-w-md rounded-2xl bg-card p-6 shadow-[var(--shadow-pop)]">
           <h2 className="text-2xl uppercase">Código da equipe</h2>
           <p className="mt-1 text-sm opacity-85">Digite o código de acesso da equipe de comunicação para liberar os envios.</p>
-          <Input className="mt-4" value={code} onChange={(e) => setCode(e.target.value)} required placeholder="Código" />
+          <Input className="mt-4" value={code} onChange={(e) => setCode(e.target.value)} required type="password" placeholder="Senha da equipe" />
           <Button type="submit" className="mt-3 w-full font-bold">Liberar acesso</Button>
         </form>
       )}
