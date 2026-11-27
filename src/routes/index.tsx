@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { Download, X, Camera } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Download, X, Camera, ChevronLeft, ChevronRight } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { CAMP_DAYS, isCampDay } from "@/lib/camp";
 import { photosQuery, type Photo } from "@/lib/photos";
@@ -60,6 +60,19 @@ function Index() {
   const { dia } = Route.useSearch();
   const { data, isLoading, error } = useQuery(photosQuery(dia));
   const [open, setOpen] = useState<Photo | null>(null);
+  const openIndex = data?.findIndex(p => p.id === open?.id) ?? -1;
+  const previous = openIndex > 0 ? data?.[openIndex - 1] : undefined;
+  const next = openIndex >= 0 ? data?.[openIndex + 1] : undefined;
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(null);
+      if (e.key === "ArrowLeft" && previous) { e.preventDefault(); setOpen(previous); }
+      if (e.key === "ArrowRight" && next) { e.preventDefault(); setOpen(next); }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, previous, next]);
   const current = CAMP_DAYS[dia - 1];
   const backgroundPhotos = backgroundPhotosByDay[dia - 1] ?? backgroundPhotosByDay[0];
 
@@ -127,10 +140,12 @@ function Index() {
 
       {open && <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4" onClick={() => setOpen(null)}>
         <button className="absolute right-4 top-4 rounded-full bg-white/10 p-3 text-white" aria-label="Fechar"><X /></button>
-        <figure className="max-h-full max-w-5xl" onClick={(e) => e.stopPropagation()}>
-          <img src={open.url} alt={open.caption ?? ""} className="max-h-[80vh] rounded-xl object-contain" />
+        {previous && <button type="button" aria-label="Foto anterior" onClick={e => { e.stopPropagation(); setOpen(previous); }} className="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/70 p-3 text-white ring-1 ring-white/30 hover:bg-white/20 sm:left-6"><ChevronLeft /></button>}
+        {next && <button type="button" aria-label="Próxima foto" onClick={e => { e.stopPropagation(); setOpen(next); }} className="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/70 p-3 text-white ring-1 ring-white/30 hover:bg-white/20 sm:right-6"><ChevronRight /></button>}
+        <figure className="max-h-full max-w-5xl w-full px-8 sm:px-14" onClick={(e) => e.stopPropagation()}>
+          <img src={open.url} alt={open.caption ?? ""} className="mx-auto max-h-[80vh] max-w-full rounded-xl object-contain" />
           <figcaption className="mt-3 flex items-center justify-between gap-4 text-white">
-            <span>{open.caption}</span>
+            <span>{open.caption} {openIndex >= 0 && <small className="block text-white/70">{openIndex + 1} / {data?.length}</small>}</span>
             <a href={open.url} download target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full bg-[#ffdb55] px-4 py-2 text-sm font-bold text-[#07465a]"><Download className="h-4 w-4" /> Baixar</a>
           </figcaption>
         </figure>
