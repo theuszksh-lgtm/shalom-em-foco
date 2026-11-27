@@ -73,6 +73,24 @@ function Index() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open, previous, next]);
+  const [heroFade, setHeroFade] = useState(0);
+  useEffect(() => {
+    let frame = 0;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => {
+      frame = 0;
+      setHeroFade(reduced.matches ? 0 : Math.min(1, Math.max(0, window.scrollY / 260)));
+    };
+    const onScroll = () => { if (!frame) frame = window.requestAnimationFrame(update); };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    reduced.addEventListener("change", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      reduced.removeEventListener("change", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, []);
   const current = CAMP_DAYS[dia - 1];
   const backgroundPhotos = backgroundPhotosByDay[dia - 1] ?? backgroundPhotosByDay[0];
 
@@ -91,7 +109,7 @@ function Index() {
       <SiteHeader />
       <main>
         <section className="relative isolate mx-auto flex max-w-6xl flex-col items-center gap-8 overflow-hidden rounded-2xl px-6 py-10 sm:flex-row sm:py-12">
-          <img src="/image.png" alt="Arte oficial do Acamps — Um pedacinho do céu" className="w-48 shrink-0 -rotate-3 rounded-xl shadow-2xl sm:w-56" />
+          <img src="/image.png" alt="Arte oficial do Acamps — Um pedacinho do céu" className="w-48 shrink-0 rounded-xl shadow-2xl sm:w-56" style={{ opacity: 1 - heroFade, filter: `blur(${heroFade * 12}px)`, transform: `translateY(${heroFade * -18}px) scale(${1 - heroFade * 0.09}) rotate(-3deg)`, willChange: "opacity, transform, filter" }} />
           <div className="text-center sm:text-left">
             <span className="rounded-full bg-[#fff9e8] px-3 py-1 text-xs font-bold uppercase tracking-widest text-[#075a70]">Fotos oficiais</span>
             <h1 className="mt-4 font-display text-5xl uppercase leading-none text-[#ffdb55] sm:text-7xl">ACAMP’S<br/>2K27.1</h1>
