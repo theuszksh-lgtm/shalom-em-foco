@@ -79,7 +79,7 @@ function Index() {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
     const update = () => {
       frame = 0;
-      setHeroFade(reduced.matches ? 0 : Math.min(1, Math.max(0, window.scrollY / 260)));
+      setHeroFade(reduced.matches ? 0 : Math.min(1, Math.max(0, window.scrollY / 65)));
     };
     const onScroll = () => { if (!frame) frame = window.requestAnimationFrame(update); };
     update();
