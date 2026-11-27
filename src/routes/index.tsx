@@ -91,6 +91,40 @@ function Index() {
       if (frame) window.cancelAnimationFrame(frame);
     };
   }, []);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState("");
+  async function savePhoto(photo: Photo) {
+    setSaving(true);
+    setSaveError("");
+    try {
+      const response = await fetch(photo.url);
+      if (!response.ok) throw new Error("Download failed");
+      const blob = await response.blob();
+      const filename = photo.storage_path.split("/").pop() || "acamps.jpg";
+      const file = new File([blob], filename, { type: blob.type || "image/jpeg" });
+      const mobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+      if (mobile && navigator.canShare?.({ files: [file] })) {
+        try {
+          await navigator.share({ files: [file] });
+          return;
+        } catch (err) {
+          if (err instanceof Error && err.name === "AbortError") return;
+        }
+      }
+      const url = URL.createObjectURL(file);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 60000);
+    } catch {
+      setSaveError("Não foi possível baixar. Toque e segure a foto para salvá-la ou tente novamente.");
+    } finally {
+      setSaving(false);
+    }
+  }
   const current = CAMP_DAYS[dia - 1];
   const backgroundPhotos = backgroundPhotosByDay[dia - 1] ?? backgroundPhotosByDay[0];
 
@@ -164,8 +198,9 @@ function Index() {
           <img src={open.url} alt={open.caption ?? ""} className="mx-auto max-h-[80vh] max-w-full rounded-xl object-contain" />
           <figcaption className="mt-3 flex items-center justify-between gap-4 text-white">
             <span>{open.caption} {openIndex >= 0 && <small className="block text-white/70">{openIndex + 1} / {data?.length}</small>}</span>
-            <a href={open.url} download target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full bg-[#ffdb55] px-4 py-2 text-sm font-bold text-[#07465a]"><Download className="h-4 w-4" /> Baixar</a>
+            <button type="button" disabled={saving} onClick={() => void savePhoto(open)} className="inline-flex items-center gap-2 rounded-full bg-[#ffdb55] px-4 py-2 text-sm font-bold text-[#07465a] disabled:opacity-50"><Download className="h-4 w-4" /> {saving ? "Preparando..." : "Baixar"}</button>
           </figcaption>
+          {saveError && <p role="alert" className="mt-2 text-sm text-white">{saveError}</p>}
         </figure>
       </div>}
     </div>
